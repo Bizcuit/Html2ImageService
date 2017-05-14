@@ -4,7 +4,6 @@
   "description": "Web service that allows to render parametrized HTML to images",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
 	"start": "node index.js"
   },
   "author": "Sergey Agadzhanov",

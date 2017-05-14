@@ -1,0 +1,17 @@
+{
+  "name": "renderer",
+  "version": "1.0.0",
+  "description": "Web service that allows to render parametrized HTML to images",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Sergey Agadzhanov",
+  "license": "ISC",
+  "dependencies": {
+    "express": "^4.15.2",
+    "mustache": "^2.3.0",
+    "pug": "^2.0.0-rc.1",
+    "wkhtmltox": "^1.0.8"
+  }
+}

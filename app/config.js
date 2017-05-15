@@ -1,5 +1,5 @@
 
 module.exports = {
 	env: 'dev',
-	serverPort: 8080
+	serverPort: (process.env.PORT || 8080)
 }

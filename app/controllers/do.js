@@ -60,7 +60,7 @@ router.get(/^\/([a-z0-9]+)\/([a-z0-9]+)_(\d+)x(\d+)\.(jpg|png)$/, function(req, 
 			'crop-y': 	0
 		}
 
-		return utils.render(html, imgInfo.getLocalImgPath(), options);
+		return utils.render(html, imgInfo, options);
 	})
 	.then((imagePath) => {
 		res.type(_format);

@@ -44,8 +44,9 @@ module.exports = {
 		});
 	},
 
-	render: function(html, outputPath, options){
+	render: function(html, imgInfo, options){
 		return new Promise((resolve, reject) => {
+			var outputPath = imgInfo.getLocalImgPath();
 			var dir = path.dirname(outputPath);
 			
 			if (!fs.existsSync(dir)){
@@ -59,7 +60,7 @@ module.exports = {
 			converter.image(stream, options)
 			.pipe(fs.createWriteStream(outputPath))
 			.on('finish', () => {
-				this.fileUpload(outputPath);
+				this.fileUpload(imgInfo.getImgPath());
 				resolve(outputPath);
 			});
 		});

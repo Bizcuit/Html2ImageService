@@ -9,7 +9,7 @@ app.set('view engine', 'pug');
 
 app.use('/do', requireRoot('controllers/do'));
 app.use('/manage', requireRoot('controllers/manage'));
-app.use('/static', express.static(rootPath + '/public'))
+app.use('/public', express.static(rootPath + '/public'))
 
 app.listen(config.serverPort, function() {
 	console.log('Application started: ' + (new Date()));

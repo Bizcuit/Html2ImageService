@@ -2,8 +2,15 @@ var fs 			= require("fs");
 var readable	= require('stream').Readable;
 var path 		= require('path');
 var crypto 		= require('crypto');
+var config		= requireRoot('config');
+var gcs			= require('@google-cloud/storage')(config.googlecloudConnection);
 
 module.exports = {
+	hashCreate: function(input){
+		var inputString = typeof input == 'object' ? JSON.stringify(input) : input;
+		return crypto.createHash('md5').update(inputString).digest('hex')
+	},
+
 	pathExists: function(path){
 		return new Promise((resolve, reject) =>{
 			fs.access(path, fs.constants.R_OK, (err) => {
@@ -17,18 +24,22 @@ module.exports = {
 		});
 	},
 
-	hashCreate: function(input){
-		var inputString = typeof input == 'object' ? JSON.stringify(input) : input;
-		return crypto.createHash('md5').update(inputString).digest('hex')
+	fileRead: function(path){
+		var bucket = gcs.bucket('html2image');
+		var file = bucket.file(path);
+		return file.download();
 	},
 
-	fileRead: function(path){
+	fileUpload: function(path){
 		return new Promise((resolve, reject) => {
-			fs.readFile(path, 'utf8', function (err,data) {
-				if (err) {
+			var bucket = gcs.bucket('html2image');
+			bucket.upload(path, function(err, file, apiResponse) {
+				if(!err){
+					resolve(file);
+				}
+				else{
 					reject(err);
 				}
-				resolve(data);
 			});
 		});
 	},
@@ -48,6 +59,7 @@ module.exports = {
 			converter.image(stream, options)
 			.pipe(fs.createWriteStream(outputPath))
 			.on('finish', () => {
+				this.fileUpload(outputPath);
 				resolve(outputPath);
 			});
 		});

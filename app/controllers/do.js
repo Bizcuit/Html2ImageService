@@ -12,51 +12,58 @@ var router 		= express.Router();
 */
 
 router.get(/^\/([a-z0-9]+)\/([a-z0-9]+)_(\d+)x(\d+)\.(jpg|png)$/, function(req, res){
-	var company 	= req.params[0];
-	var template 	= req.params[1];
-	var width 		= parseInt(req.params[2]);
-	var height 		= parseInt(req.params[3]);
-	var format 		= req.params[4];
+	var _width 		= parseInt(req.params[2]);
+	var _height 	= parseInt(req.params[3]);
+	var _company	= req.params[0];
+	var _template	= req.params[1];
+	var _format 	= req.params[4];
 	
-	var contentDir 		= `${rootPath}/content/${company}/${template}/`;
-	
-	var templatePath	= contentDir + 'index.html';
 	var templateData	= extend({
-		screenWidth: width,
-		screenHeight: height
+		screenWidth: 	_width,
+		screenHeight: 	_height
 	}, req.query);
 
-	var imageDir		= contentDir + 'img';
-	var imageName		= utils.hashCreate(templateData) + '.' + format;
-	var imagePath		= imageDir + '/' + imageName;
+	var imgInfo = {
+		company: 		_company,
+		template: 		_template,
+		format:			_format,
+		width:			_width,
+		height:			_height,
 
-	res.type(format);
+		getTemplateDir:		function() { return `${this.company}/${this.template}`; },
+		getTemplatePath:	function() { return this.getTemplateDir() + '/index.html' },
+		getImgFilename:		function() { return utils.hashCreate(templateData) + '.' + this.format; },
+		getImgPath:			function() { return this.getTemplateDir() + '/img/' + this.getImgFilename(); },
+		getLocalImgPath:	function() { return rootPath + '/content/' + this.getImgPath(); }
+	};
+
+	res.type(imgInfo.format);
 
 	//if image already exists - return image and stop
-	if(fs.existsSync(imagePath)){
-		res.sendFile(imagePath);
+	if(fs.existsSync(imgInfo.getLocalImgPath())){
+		res.sendFile(imgInfo.getLocalImgPath());
 		return;
 	}
 	
 	//if image doesn't exist
-	utils.fileRead(templatePath)
+	utils.fileRead(imgInfo.getTemplatePath())
 	.then((templateContent) => {
-		var html = mustache.render(templateContent, templateData);
+		var html = mustache.render(templateContent.toString(), templateData);
 		var options = {
-			'format': format,
-			'width': width,
-			'height': height,
-			'crop-w': width,
-			'crop-h': height,
 			'disable-smart-width': null,
-			'crop-x': 0,
-			'crop-y': 0
+			'format': 	imgInfo.format,
+			'width': 	imgInfo.width,
+			'height': 	imgInfo.height,
+			'crop-w': 	imgInfo.width,
+			'crop-h': 	imgInfo.height,
+			'crop-x': 	0,
+			'crop-y': 	0
 		}
 
-		return utils.render(html, imagePath, options);
+		return utils.render(html, imgInfo.getLocalImgPath(), options);
 	})
 	.then((imagePath) => {
-		res.type(format);
+		res.type(_format);
 		res.sendFile(imagePath);
 	})
 	.catch((error) => {

@@ -1,0 +1,22 @@
+blockquote
+	p Registration is not required. Create a new template and don't forget to save the password. You'll need it to make changes to the existing templates. You can use any COMPANY and TEMPLATE names that you would like. But remember that these names should only contain latin letters and digits.
+
+
+div.row
+	div.column
+		label(for='tb_Company') Your company name:
+	div.column
+		input(type='text', id='tb_Company', placeholder='company name')
+div.row
+	div.column
+		label(for='tb_TemplateName') Your template name:
+	div.column
+		input(type='text', id='tb_TemplateName', placeholder='template name')
+div.row
+	div.column
+		label(for='tb_TemplatePassword') Your template password:
+	div.column
+		input(type='password', id='tb_TemplatePassword', placeholder='template password')
+div.row
+	div.column
+		a#btn_OpenTemplate.button Create new template or open an existing one

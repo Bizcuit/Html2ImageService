@@ -1,0 +1,12 @@
+extends ../layout.pug
+
+block scripts
+	script(src='/public/js/main.js')
+
+block content
+
+	div#bl_OpenCreate
+		include open_create_form
+
+	div#bl_Editor
+		include editor_form

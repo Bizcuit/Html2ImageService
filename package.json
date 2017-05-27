@@ -10,9 +10,11 @@
   "license": "ISC",
   "dependencies": {
     "@google-cloud/storage": "^1.1.1",
+    "body-parser": "^1.17.2",
     "express": "^4.15.2",
     "mustache": "^2.3.0",
     "pug": "^2.0.0-rc.1",
+    "redis": "^2.7.1",
     "wkhtmltox": "^1.0.8"
   }
 }

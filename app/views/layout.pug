@@ -1,0 +1,26 @@
+doctype strict
+html
+	head
+		title html2image service
+		script(src='https://code.jquery.com/jquery-3.2.1.min.js', integrity='sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4=', crossorigin='anonymous')
+		script(src='//cdnjs.cloudflare.com/ajax/libs/ace/1.2.6/ace.js')
+		link(rel='stylesheet', href='//fonts.googleapis.com/css?family=Roboto:300,300italic,700,700italic')
+		link(rel='stylesheet', href='//cdnjs.cloudflare.com/ajax/libs/normalize/3.0.3/normalize.css')
+		link(rel='stylesheet', href='//cdn.rawgit.com/necolas/normalize.css/master/normalize.css')
+		link(rel='stylesheet', href='//cdn.rawgit.com/milligram/milligram/master/dist/milligram.min.css')
+		link(rel='stylesheet', href='/public/css/main.css')
+		
+		block scripts
+			script(src='/jquery.js')
+	body
+		div.header
+			div.container
+				h5 <strong>html2image</strong> - render your html to image in real time
+				a(href='https://github.com/Bizcuit/Html2ImageService', target='_blank')
+					img(src='/public/img/github.png', align='right')
+
+		div.container
+			block content
+		
+		include popup
+

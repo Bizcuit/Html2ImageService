@@ -1,66 +1,33 @@
-var express 	= require('express');
-var utils		= requireRoot('modules/utils');
-var mustache	= require('mustache');
-var extend 		= require('util')._extend;
-var fs 			= require('fs');
+var express 		= require('express');
+var utils			= requireRoot('modules/utils');
+var ImageInfo		= requireRoot('modules/ImageInfo');
+var mustache		= require('mustache');
+var fs 				= require('fs');
 
-var router 		= express.Router();
+var router 			= express.Router();
 
 /* 
-	URL fomat: /[company]/[template]_[width]x[height].[format]?[template variables]
-	Example: /salesforce/tmp1_120x80.jpg?name=Sergey
+	URL fomat: /[company]/[template]-[width]x[height].[format]?[template variables]
+	Example: /salesforce/tmp1-120x80.jpg?name=Sergey
 */
 
-router.get(/^\/([a-z0-9]+)\/([a-z0-9]+)_(\d+)x(\d+)\.(jpg|png)$/, function(req, res){
-	var _width 		= parseInt(req.params[2]);
-	var _height 	= parseInt(req.params[3]);
-	var _company	= req.params[0];
-	var _template	= req.params[1];
-	var _format 	= req.params[4];
+router.get('/:company(\\w+)/:template(\\w+)-:width(\\d+)x:height(\\d+).:format(\\w{3})', function(req, res){
+	var imgInfo = new ImageInfo(req.params, req.query);
 	
-	var templateData	= extend({
-		screenWidth: 	_width,
-		screenHeight: 	_height
-	}, req.query);
-
-	var imgInfo = {
-		company: 		_company,
-		template: 		_template,
-		format:			_format,
-		width:			_width,
-		height:			_height,
-
-		getTemplateDir:		function() { return `${this.company}/${this.template}`; },
-		getTemplatePath:	function() { return this.getTemplateDir() + '/index.html' },
-		getImgFilename:		function() { return utils.hashCreate(templateData) + '.' + this.format; },
-		getImgPath:			function() { return this.getTemplateDir() + '/img/' + this.getImgFilename(); },
-		getLocalImgPath:	function() { return rootPath + '/content/' + this.getImgPath(); }
-	};
-
 	res.type(imgInfo.format);
 
 	//if image already exists - return image and stop
-	if(fs.existsSync(imgInfo.getLocalImgPath())){
-		res.sendFile(imgInfo.getLocalImgPath());
+	if(fs.existsSync(imgInfo.imageFilePathLocal)){
+		res.sendFile(imgInfo.imageFilePathLocal);
 		return;
 	}
 	
 	//if image doesn't exist
-	utils.fileRead(imgInfo.getTemplatePath())
+	utils.fileRead(imgInfo.templateFilePath)
 	.then((templateContent) => {
-		var html = mustache.render(templateContent.toString(), templateData);
-		var options = {
-			'disable-smart-width': null,
-			'format': 	imgInfo.format,
-			'width': 	imgInfo.width,
-			'height': 	imgInfo.height,
-			'crop-w': 	imgInfo.width,
-			'crop-h': 	imgInfo.height,
-			'crop-x': 	0,
-			'crop-y': 	0
-		}
+		var html = mustache.render(templateContent.toString(), imgInfo.tempateDataObject);
 
-		return utils.render(html, imgInfo, options);
+		return utils.render(html, imgInfo, imgInfo.wkhtmlParameters);
 	})
 	.then((imagePath) => {
 		res.type(_format);

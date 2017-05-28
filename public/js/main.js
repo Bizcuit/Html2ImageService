@@ -61,6 +61,8 @@ var Html2Image = {
 	templatePreview: function(){
 		var imgPreviewLink = this.templateGetUrl();
 		$('#img_Preview').attr('src', imgPreviewLink + (new Date()));
+		$('#bl_Preview').width($('#tb_ImgWidth').val() + 'px');
+		$('#bl_Preview').height($('#tb_ImgHeight').val() + 'px');
 
 		var doc = $('#bl_Preview').get(0).contentWindow.document;
 		doc.open();

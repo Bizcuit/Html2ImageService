@@ -9,16 +9,16 @@ function ImageInfo(props, query){
 	this.format 		= props.format;
 	this.query 			= query;
 
-	this.templateFolder 	= `${this.company}/${this.template}`;
-	this.templateFilePath	= `${this.templateFolder}/index.html`;
+
 	this.tempateDataObject	= extend({
 		_screenWidth: 	this.width,
 		_screenHeight: 	this.height
 	}, this.query);
 
-	this.imageFileName			= utils.hashCreate(this.tempateDataObject) + '.' + this.format;
-	this.imageFilePath			= `${this.templateFolder}/img/${this.imageFileName}`;
-	this.imageFilePathLocal		= `${rootPath}/content/${this.imageFilePath}`;
+	this.imageFileName			= `${this.company}_${this.template}_${utils.hashCreate(this.tempateDataObject)}.${this.format}`;
+
+	this.templateKey 	= utils.getTemplateKey(this.company, this.template);
+	this.key			= utils.getImageKey(this.imageFileName);
 
 	this.wkhtmlParameters = {
 		'disable-smart-width': null,
@@ -31,6 +31,5 @@ function ImageInfo(props, query){
 		'crop-y': 	0
 	}
 }
-
 
 module.exports = ImageInfo;

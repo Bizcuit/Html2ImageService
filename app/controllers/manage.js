@@ -12,7 +12,7 @@ var sendApiError = function(res, message){
 
 var getTemplate = function(data){
 	var regexWord = /^\w+$/;
-	var templateKey = utils.getTemplateKey(`${data.company}_${data.template}`);
+	var templateKey = utils.getTemplateKey(data.company, data.template);
 	
 	return new Promise((resolve, reject) => {
 		if(!regexWord.test(data.company) || !regexWord.test(data.template)){
@@ -43,7 +43,7 @@ router.post('/template/get', urlencodedParser, function(req, res){
 	};
 	var output = null;
 
-	var templateKey = utils.getTemplateKey(`${input.company}_${input.template}`);
+	var templateKey = utils.getTemplateKey(input.company, input.template);
 
 	getTemplate(input)
 	.then(function(template){
@@ -66,7 +66,7 @@ router.post('/template/save', urlencodedParser, function(req, res){
 		html: 		req.body.html
 	};
 
-	var templateKey = utils.getTemplateKey(`${input.company}_${input.template}`);
+	var templateKey = utils.getTemplateKey(input.company, input.template);
 
 	getTemplate(input)
 	.then((data) => {
@@ -85,7 +85,5 @@ router.post('/template/save', urlencodedParser, function(req, res){
 	});
 
 });
-
-
 
 module.exports = router;

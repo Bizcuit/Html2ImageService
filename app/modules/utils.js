@@ -1,12 +1,8 @@
-var fs 			= require("fs");
 var readable	= require('stream').Readable;
-var path 		= require('path');
 var crypto 		= require('crypto');
 var config		= requireRoot('config');
-var gcs			= require('@google-cloud/storage')(config.googlecloudConnection);
 var redis 		= require('redis');
-
-var client = redis.createClient(config.redisConnection);
+var client 		= redis.createClient(config.redisConnection);
 
 
 module.exports = {
@@ -22,8 +18,8 @@ module.exports = {
 		return type + '_' + name;
 	},
 
-	getTemplateKey: function(name){
-		return this.getDatabaseKey('TMPL', name);
+	getTemplateKey: function(company, name){
+		return this.getDatabaseKey('TMPL', `${company}_${name}`);
 	},
 
 	getImageKey: function(name){
@@ -56,62 +52,20 @@ module.exports = {
 		});
 	},
 
-	pathExists: function(path){
-		return new Promise((resolve, reject) =>{
-			fs.access(path, fs.constants.R_OK, (err) => {
-				if(err){
-					reject();
-				}
-				else{
-					resolve();
-				}
-			});			
-		});
-	},
-
-	
-
-	fileRead: function(path){
-		var bucket = gcs.bucket(config.googlecloudBucket);
-
-		console.log(`Template requested: ${path}`);
-
-		var file = bucket.file(path);
-		return file.download();
-	},
-
-	fileUpload: function(path){
+	render: function(html, options){
 		return new Promise((resolve, reject) => {
-			var bucket = gcs.bucket(config.googlecloudBucket);
-			bucket.upload(path, function(err, file, apiResponse) {
-				if(!err){
-					resolve(file);
-				}
-				else{
-					reject(err);
-				}
-			});
-		});
-	},
-
-	render: function(html, imgInfo, options){
-		return new Promise((resolve, reject) => {
-			var outputPath = imgInfo.imageFilePathLocal;
-			var dir = path.dirname(outputPath);
-			
-			if (!fs.existsSync(dir)){
-				fs.mkdirSync(dir);
-			}		
-			
 			var stream = new readable();
 			stream.push(html);
 			stream.push(null); 
 
+			var chunks = [];
+
 			converter.image(stream, options)
-			.pipe(fs.createWriteStream(outputPath))
+			.on('data', (chunk) => {
+				chunks.push(chunk);
+			})
 			.on('finish', () => {
-				this.fileUpload(imgInfo.imageFilePath);
-				resolve(outputPath);
+				resolve(Buffer.concat(chunks));
 			});
 		});
 	}

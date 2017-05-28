@@ -1,16 +1,61 @@
 blockquote
 	p Just copy and paste your HTML code here. Click preview to check that everything is working as expected and then save your template. 
-	p TODO: add normal manual here.
 
-label(for='tb_Editor') Your HTML
+hr
+
+h3 HTML:
+
+div#bl_TemplateInfo.row
+	div.column
+		strong Template information:
+	div.column.column-75
+		span company:
+		span.company -
+		span |
+		span template:
+		span.template -
 
 textarea(id='tb_Editor', placeholder='your html goes here')
+div(style='text-align: right;')
+	button#btn_SaveTemplate.button.button-outline Save template
+
+hr
+
+h3 Preview configuration:
+
+div.row.parameters
+	div.column
+		strong Parameters:
+	div.column.column-30.text-right
+		span Width:
+		span
+			input#tb_ImgWidth(type='text', value='300')
+	div.column.column-30.text-right
+		span Height:
+		span
+			input#tb_ImgHeight(type='text', value='100')
+div.row
+	div.column
+		strong Image link:
+	div.column.column-75
+		input#tb_ImgLink(type='text', readonly='true')
+
 
 div.row
 	div.column
-		a#btn_PreviewTemplate.button Preview your changes
-	div.column
-		a#btn_NewTemplate.button New template
-	div.column(style='text-align: right;')
-		button#btn_SaveTemplate.button.button-outline Save your template
+		a#btn_PreviewTemplate.button Update preview
+//	div.column
+//		a#btn_NewTemplate.button New template
 
+hr
+
+h3 HTML preview:
+div(style='border: solid 1px #9b4dca; padding: 0px;')
+	iframe#bl_Preview(width='100%', height='300', style='width: 100%; height: 300px; border: 0px;')
+
+hr
+
+h3 Image preview:
+img#img_Preview
+
+hr

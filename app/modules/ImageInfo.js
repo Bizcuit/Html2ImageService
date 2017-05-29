@@ -22,6 +22,7 @@ function ImageInfo(props, query){
 
 	this.wkhtmlParameters = {
 		'disable-smart-width': null,
+		'encoding':	'utf-8',
 		'format': 	this.format,
 		'width':	this.width,
 		'height': 	this.height,

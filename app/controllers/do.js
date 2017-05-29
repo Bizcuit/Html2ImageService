@@ -52,7 +52,6 @@ function imageRead(imgInfo){
 
 router.get('/:company(\\w+)/:template(\\w+)-:width(\\d+)x:height(\\d+).:format(\\w{3})', function(req, res){
 	var imgInfo = new ImageInfo(req.params, req.query);
-	
 	res.type(imgInfo.format);
 
 	imageRead(imgInfo)

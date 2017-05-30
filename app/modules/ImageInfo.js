@@ -21,15 +21,16 @@ function ImageInfo(props, query){
 	this.key			= utils.getImageKey(this.imageFileName);
 
 	this.wkhtmlParameters = {
-		'disable-smart-width': null,
-		'encoding':	'utf-8',
-		'format': 	this.format,
-		'width':	this.width,
-		'height': 	this.height,
-		'crop-w': 	this.width,
-		'crop-h': 	this.height,
-		'crop-x': 	0,
-		'crop-y': 	0
+		'disable-smart-width': 	null,
+		'transparent': 			null,
+		'encoding':				'utf-8',
+		'format': 				this.format,
+		'width':				this.width,
+		'height': 				this.height,
+		'crop-w': 				this.width,
+		'crop-h': 				this.height,
+		'crop-x': 				0,
+		'crop-y': 				0
 	}
 }
 

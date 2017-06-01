@@ -26,16 +26,24 @@ module.exports = {
 		return this.getDatabaseKey('IMG', name);
 	},
 
-	saveData: function(key, data){
+	saveData: function(key, data, ttl){
 		return new Promise((resolve, reject) => {
-			client.set(key, JSON.stringify(data), function(err, resp){
+			var callback = function(err, resp){
 				if(err){
 					reject(err);
 				}
 				else{
 					resolve(resp);
 				}
-			});
+			}
+			
+			if(ttl){
+				//set ttl in hours
+				client.set(key, JSON.stringify(data), 'EX', ttl * 3600,  callback);
+			}
+			else{
+				client.set(key, JSON.stringify(data), callback);
+			}
 		});
 	},
 

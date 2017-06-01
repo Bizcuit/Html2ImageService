@@ -26,7 +26,7 @@ function imageCreate(imgInfo){
 			
 			utils.saveData(imgInfo.key, {
 				data: buffer.toString('base64')
-			});
+			}, 6);
 			return new Promise((resolve, reject) => {
 				resolve(buffer);
 			});

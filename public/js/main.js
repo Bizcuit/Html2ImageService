@@ -87,8 +87,8 @@ var Html2Image = {
 			+ '/do/' + this.currentTemplate.company + '/'
 			+ this.currentTemplate.template + '-'
 			+ $('#tb_ImgWidth').val() + 'x'
-			+ $('#tb_ImgHeight').val()
-			+ '.jpg?';
+			+ $('#tb_ImgHeight').val() + '.'
+			+ $('#dd_ImgType').val() + '?';
 		
 		for(var i = 0; i < parameters.length; i++){
 			link += parameters[i] + '=test_val_for_' + parameters[i] + '&' 

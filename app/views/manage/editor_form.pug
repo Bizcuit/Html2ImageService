@@ -26,11 +26,18 @@ h3 Preview configuration:
 div.row.parameters
 	div.column
 		strong Parameters:
-	div.column.column-30.text-right
+	div.column.column-25.text-right
+		span Format:
+		span
+			select#dd_ImgType(style='width: 120px;')
+				option(value='png') PNG
+				option(value='jpg', selected='selected') JPG
+
+	div.column.column-20.text-right
 		span Width:
 		span
-			input#tb_ImgWidth(type='text', value='300')
-	div.column.column-30.text-right
+			input#tb_ImgWidth(type='text', value='400')
+	div.column.column-20.text-right
 		span Height:
 		span
 			input#tb_ImgHeight(type='text', value='100')

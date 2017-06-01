@@ -2,6 +2,7 @@ var express 		= require('express');
 var utils			= requireRoot('modules/utils');
 var ImageInfo		= requireRoot('modules/ImageInfo');
 var mustache		= require('mustache');
+var config			= requireRoot('config');
 
 var router 			= express.Router();
 
@@ -26,7 +27,7 @@ function imageCreate(imgInfo){
 			
 			utils.saveData(imgInfo.key, {
 				data: buffer.toString('base64')
-			}, 6);
+			}, config.imageCacheTTL);
 			return new Promise((resolve, reject) => {
 				resolve(buffer);
 			});
